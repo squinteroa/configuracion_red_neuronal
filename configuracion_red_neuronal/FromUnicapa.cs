@@ -268,9 +268,9 @@ namespace configuracion_red_neuronal
             {
                 CalculosPorPatron();
                 CalcularElErrorDeLaIteracion();
-                Graficar();
                 n++;
             }
+            Graficar();
             MessageBox.Show(Convert.ToString(n));
         }
 
@@ -307,8 +307,10 @@ namespace configuracion_red_neuronal
             chart1.Titles.Add("GRAFICA");
             for (int i = 0; i < ErrorIteracion.Length; i++)
             {
-                Series serie = chart1.Series.Add("Iteracion " + i);
-                serie.Points.Add(Convert.ToDouble(ErrorIteracion[i]));
+                //MessageBox.Show(Convert.ToString(i));
+                Series series1 = chart1.Series.Add("Iteracion " + i);
+                series1.Points.Add(Convert.ToDouble(ErrorIteracion[i]));
+                //MessageBox.Show(Convert.ToString(ErrorIteracion[i]));
             }
         }
 

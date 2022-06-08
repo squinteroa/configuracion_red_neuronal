@@ -31,6 +31,7 @@ namespace configuracion_red_neuronal
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.comboBoxTipoDeRed = new System.Windows.Forms.ComboBox();
             this.labelTipoDeRed = new System.Windows.Forms.Label();
             this.comboBoxFuncion = new System.Windows.Forms.ComboBox();
@@ -418,9 +419,13 @@ namespace configuracion_red_neuronal
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(413, 272);
+            this.chart1.Location = new System.Drawing.Point(425, 272);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(474, 268);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(462, 281);
             this.chart1.TabIndex = 143;
             this.chart1.Text = "chart1";
             // 

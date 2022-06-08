@@ -29,6 +29,8 @@ namespace configuracion_red_neuronal
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.comboBoxTipoDeRed = new System.Windows.Forms.ComboBox();
             this.labelTipoDeRed = new System.Windows.Forms.Label();
             this.comboBoxFuncion = new System.Windows.Forms.ComboBox();
@@ -59,6 +61,8 @@ namespace configuracion_red_neuronal
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxCapas = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxTipoDeRed
@@ -308,6 +312,7 @@ namespace configuracion_red_neuronal
             this.textBoxNIteraciones.Name = "textBoxNIteraciones";
             this.textBoxNIteraciones.Size = new System.Drawing.Size(70, 20);
             this.textBoxNIteraciones.TabIndex = 134;
+            this.textBoxNIteraciones.Text = "1";
             // 
             // textBoxErrorMaximoPermitido
             // 
@@ -316,6 +321,7 @@ namespace configuracion_red_neuronal
             this.textBoxErrorMaximoPermitido.Name = "textBoxErrorMaximoPermitido";
             this.textBoxErrorMaximoPermitido.Size = new System.Drawing.Size(70, 20);
             this.textBoxErrorMaximoPermitido.TabIndex = 135;
+            this.textBoxErrorMaximoPermitido.Text = "0.5";
             // 
             // textBoxRata
             // 
@@ -324,6 +330,7 @@ namespace configuracion_red_neuronal
             this.textBoxRata.Name = "textBoxRata";
             this.textBoxRata.Size = new System.Drawing.Size(70, 20);
             this.textBoxRata.TabIndex = 136;
+            this.textBoxRata.Text = "0.5";
             // 
             // label11
             // 
@@ -405,11 +412,24 @@ namespace configuracion_red_neuronal
             this.label12.TabIndex = 141;
             this.label12.Text = "Capas Intermedias";
             // 
+            // chart1
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(413, 272);
+            this.chart1.Name = "chart1";
+            this.chart1.Size = new System.Drawing.Size(474, 268);
+            this.chart1.TabIndex = 143;
+            this.chart1.Text = "chart1";
+            // 
             // FromUnicapa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(899, 565);
+            this.Controls.Add(this.chart1);
             this.Controls.Add(this.comboBoxCapas);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.comboBoxDefinir);
@@ -445,6 +465,7 @@ namespace configuracion_red_neuronal
             this.Name = "FromUnicapa";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -482,5 +503,6 @@ namespace configuracion_red_neuronal
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.ComboBox comboBoxCapas;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }

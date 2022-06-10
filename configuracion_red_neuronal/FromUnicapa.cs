@@ -64,7 +64,7 @@ namespace configuracion_red_neuronal
             }
         }
 
-        private void CalcularElErrorDeLaIteracion(int numero)
+        private void CalcularElErrorDeLaIteracion(int num)
         {
             double suma = 0;
             for (int i = 0; i < Patrones; i++)
@@ -73,7 +73,7 @@ namespace configuracion_red_neuronal
             }
 
             suma /= Patrones;
-            ErrorIteracion[numero] = suma;
+            ErrorIteracion[num] = suma;
         }
 
         private void ModificarPesosyUmbrales()
@@ -285,15 +285,13 @@ namespace configuracion_red_neuronal
 
         private void Graficar()
         {
-            ErrorIteracion = new double[Convert.ToInt32(textBoxNIteraciones.Text)];
+            chart1.Series.Clear();
             chart1.Palette = ChartColorPalette.Pastel;
             chart1.Titles.Add("GRAFICA");
             for (int i = 0; i < ErrorIteracion.Length; i++)
             {
-                //MessageBox.Show(Convert.ToString(i));
                 Series series1 = chart1.Series.Add("Iteracion " + i);
                 series1.Points.Add(Convert.ToDouble(ErrorIteracion[i]));
-                //MessageBox.Show(Convert.ToString(ErrorIteracion[i]));
             }
         }
 

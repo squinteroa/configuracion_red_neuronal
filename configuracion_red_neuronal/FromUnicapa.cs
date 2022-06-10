@@ -69,14 +69,14 @@ namespace configuracion_red_neuronal
             double suma = 0;
             for (int i = 0; i < Patrones; i++)
             {
-                suma = sumar[i] + suma;
+                suma = ErrorPatron[i] + suma;
             }
 
             suma = suma / Convert.ToDouble(labelPatrones.Text);
 
             for (int i = 0; i < Convert.ToInt32(textBoxNIteraciones.Text); i++)
             {
-                if (sumar[i].ToString().Equals(""))
+                if (ErrorPatron[i].ToString().Equals(""))
                 {
                     ErrorIteracion[i] = suma;
                 }
@@ -107,30 +107,23 @@ namespace configuracion_red_neuronal
             }
         }
 
-        private void CalularErrorProducidoEnElPatron()
+        private void CalularErrorProducidoEnElPatron(int numero)
         {
-            sumar = new double[Patrones];
+            ErrorPatron = new double[Patrones];
             double suma = 0;
             for (int i = 0; i < Salidas; i++)
             {
-                suma = ErrorLineal[i] + suma;
+                suma += Math.Abs(ErrorLineal[i]);
             }
 
-            suma = suma / Convert.ToDouble(label2.Text);
+            suma = suma / Salidas;
 
-            for (int i = 0; i < Patrones; i++)
-            {
-                if (sumar[i].ToString().Equals(""))
-                {
-                    sumar[i] = suma;
-                    i = Salidas;
-                }
-            }
+            ErrorPatron[numero] = suma;
         }
 
         private void Escalon()
         {
-            double[] valor = CalcularSoma();
+            double[] valor = Soma;
             double[] escalon = new double[Salidas];
             for (int i = 0; i < Salidas; i++)
             {
@@ -145,7 +138,7 @@ namespace configuracion_red_neuronal
             escalonF = escalon;
         }
 
-        private double[] CalcularSoma()
+        private void CalcularSoma()
         {
             double[] valor = new double[Salidas];
             for (int i = 0; i < Salidas; i++)
@@ -155,9 +148,9 @@ namespace configuracion_red_neuronal
                 {
                     valor[i] += Convert.ToDouble(entradas[j]) * Pesos[i, j];
                 }
-                valor[i] += Umbral[i];
+                valor[i] -= Umbral[i];
             }
-            return valor;
+            Soma = valor;
         }
 
         int Entradas = 0, Salidas = 0, Patrones = 0;
@@ -167,12 +160,13 @@ namespace configuracion_red_neuronal
         double[] salidas;
         double[] escalonF;
         double[] ErrorLineal;
-        double[] sumar;
+        double[] ErrorPatron;
         double[] ErrorIteracion;
-        int CantidadPatrones = 0;
+        double[] Soma;
         private void buttonPesosYUmbrales_Click(object sender, EventArgs e)
         {
-
+            Random r = new Random();
+            double valor;
             double[,] matriz = new double[Salidas, Entradas];
             double[] umbral = new double[Salidas];
             if (label1.Text != "0" && label2.Text != "0")
@@ -181,11 +175,11 @@ namespace configuracion_red_neuronal
                 {
                     for (int j = 0; j < Entradas; j++)
                     {
-                        matriz[i, j] = GenerarRamdon();
-                        umbral[i] = GenerarRamdon();
-                        //MessageBox.Show("POSICION DE LA MATRIZ " + i + "," + j + " = " + matriz[j, i]);
+                        valor = r.Next(-10, 11);
+                        matriz[i, j] = (valor) / 10; 
                     }
-                    // MessageBox.Show("POSICION DEL UMBRAL " + i + " = " + umbral[i]);
+                    valor = r.Next(-10, 11);
+                    umbral[i] = (valor) / 10;
                 }
             }
             else
@@ -249,15 +243,16 @@ namespace configuracion_red_neuronal
 
         private void CalculosPorPatron()
         {
-            for (int i = 0; i < Convert.ToInt32(labelPatrones.Text); i++)
+            for (int i = 0; i < Patrones; i++)
             {
                 if (comboBoxFuncion.Text.Equals("ESCALON"))
                 {
-                    LLenarEntradasySalidas();
+                    LLenarEntradasySalidas(i);
+                    CalcularSoma();
                     Escalon();
                     ErrorLinealProducidoAlaSalida();
-                    CalularErrorProducidoEnElPatron();
-                    ModificarPesosyUmbrales();
+                    CalularErrorProducidoEnElPatron(i);
+                    //ModificarPesosyUmbrales();
                 }
             }
         }
@@ -266,20 +261,14 @@ namespace configuracion_red_neuronal
             int n = 0;
             for (int i = 0; i < Convert.ToInt32(textBoxNIteraciones.Text); i++)
             {
-                CalculosPorPatron();
-                CalcularElErrorDeLaIteracion();
+                //CalculosPorPatron();
+                // CalcularElErrorDeLaIteracion();
                 n++;
             }
-            Graficar();
-            MessageBox.Show(Convert.ToString(n));
-        }
-
-        private double GenerarRamdon()
-        {
-            Random r = new Random();
-            double valor = r.Next(-10, 11);
-            return valor / 10;
-
+            CalculosPorPatron();
+            PruebaValores();
+           // Graficar();
+            //MessageBox.Show(Convert.ToString(n));
         }
 
         public void Leer(string fileName)
@@ -296,7 +285,7 @@ namespace configuracion_red_neuronal
             }
 
             label1.Text = Convert.ToString(Entradas);
-            label2.Text = Convert.ToString(Salidas - 1);
+            label2.Text = Convert.ToString(Salidas);
             labelPatrones.Text = Convert.ToString(Patrones);
         }
 
@@ -314,7 +303,7 @@ namespace configuracion_red_neuronal
             }
         }
 
-        private void LLenarEntradasySalidas()
+        private void LLenarEntradasySalidas(int CantidadPatrones)
         {
             entradas = new double[Entradas];
             salidas = new double[Salidas];
@@ -324,25 +313,66 @@ namespace configuracion_red_neuronal
             string linea;
             while ((linea = reader.ReadLine()) != null)
             {
-                if (CantidadPatrones < Convert.ToInt32(labelPatrones.Text) && bandera == true)
+                if (CantidadPatrones < Patrones && bandera == true)
                 {
                     AsignarEntradasySalida(linea);
                     bandera = false;
                 }
             }
-            CantidadPatrones++;
         }
 
         private void AsignarEntradasySalida(string linea)
         {
+            string per;
             for (int i = 0; i < Entradas; i++)
             {
                 entradas[i] = Convert.ToDouble(linea.Split('|')[i]);
             }
-           
-            for (int j = 1; j < Salidas; j++)
+
+            for (int j = 0; j < Salidas; j++)
             {
-                salidas[j] = Convert.ToDouble(linea.Split(';')[j]); 
+                if (j == 0)
+                {
+                    String header = Convert.ToString(linea.Split(';')[j]);
+                    per = header.Remove(0, (Entradas * 2));
+                    try { salidas[j] = Convert.ToDouble(per); } catch { }
+                }else if(j > 0)
+                {
+                    try { salidas[j] = Convert.ToDouble(linea.Split(';')[j]); } catch { }
+                }
+            }
+        }
+
+        private void PruebaValores()
+        {
+            for (int i = 0; i < entradas.Length; i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones Entrada: " + i + " Valor: "+Convert.ToString(entradas[i]));
+            }
+
+            for (int i = 0; i < salidas.Length; i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones Salida: " + i + " Valor: " + Convert.ToString(salidas[i]));
+            }
+
+            for (int i = 0; i < salidas.Length; i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones Soma: " + i + " Valor: " + Convert.ToString(Soma[i]));
+            }
+
+            for (int i = 0; i < salidas.Length; i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones Escalon: " + i + " Valor: " + Convert.ToString(escalonF[i]));
+            }
+
+            for (int i = 0; i < salidas.Length; i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones ErrorLineal: " + i + " Valor: " + Convert.ToString(ErrorLineal[i]));
+            }
+
+            for (int i = 0; i < Patrones; i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones ErrorPatron: " + i + " Valor: " + Convert.ToString(ErrorPatron[i]));
             }
         }
     }

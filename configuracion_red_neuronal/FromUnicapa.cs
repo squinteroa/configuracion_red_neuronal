@@ -64,23 +64,16 @@ namespace configuracion_red_neuronal
             }
         }
 
-        private void CalcularElErrorDeLaIteracion()
+        private void CalcularElErrorDeLaIteracion(int numero)
         {
             double suma = 0;
             for (int i = 0; i < Patrones; i++)
             {
-                suma = ErrorPatron[i] + suma;
+                suma += ErrorPatron[i];
             }
 
-            suma = suma / Convert.ToDouble(labelPatrones.Text);
-
-            for (int i = 0; i < Convert.ToInt32(textBoxNIteraciones.Text); i++)
-            {
-                if (ErrorPatron[i].ToString().Equals(""))
-                {
-                    ErrorIteracion[i] = suma;
-                }
-            }
+            suma /= Patrones;
+            ErrorIteracion[numero] = suma;
         }
 
         private void ModificarPesosyUmbrales()
@@ -109,14 +102,13 @@ namespace configuracion_red_neuronal
 
         private void CalularErrorProducidoEnElPatron(int numero)
         {
-            ErrorPatron = new double[Patrones];
             double suma = 0;
             for (int i = 0; i < Salidas; i++)
             {
                 suma += Math.Abs(ErrorLineal[i]);
             }
 
-            suma = suma / Salidas;
+            suma /= Salidas;
 
             ErrorPatron[numero] = suma;
         }
@@ -253,6 +245,7 @@ namespace configuracion_red_neuronal
                     ErrorLinealProducidoAlaSalida();
                     CalularErrorProducidoEnElPatron(i);
                     //ModificarPesosyUmbrales();
+                    PruebaValores();
                 }
             }
         }
@@ -262,11 +255,10 @@ namespace configuracion_red_neuronal
             for (int i = 0; i < Convert.ToInt32(textBoxNIteraciones.Text); i++)
             {
                 //CalculosPorPatron();
-                // CalcularElErrorDeLaIteracion();
+                // CalcularElErrorDeLaIteracion(i);
                 n++;
             }
             CalculosPorPatron();
-            PruebaValores();
            // Graficar();
             //MessageBox.Show(Convert.ToString(n));
         }
@@ -287,6 +279,8 @@ namespace configuracion_red_neuronal
             label1.Text = Convert.ToString(Entradas);
             label2.Text = Convert.ToString(Salidas);
             labelPatrones.Text = Convert.ToString(Patrones);
+            ErrorPatron = new double[Patrones];
+            ErrorIteracion = new double[Convert.ToInt32(textBoxNIteraciones.Text)];
         }
 
         private void Graficar()
@@ -305,6 +299,7 @@ namespace configuracion_red_neuronal
 
         private void LLenarEntradasySalidas(int CantidadPatrones)
         {
+            int contador = 0;
             entradas = new double[Entradas];
             salidas = new double[Salidas];
             bool bandera = true;
@@ -313,11 +308,12 @@ namespace configuracion_red_neuronal
             string linea;
             while ((linea = reader.ReadLine()) != null)
             {
-                if (CantidadPatrones < Patrones && bandera == true)
+                if (CantidadPatrones == contador && bandera == true)
                 {
                     AsignarEntradasySalida(linea);
                     bandera = false;
                 }
+                contador++;
             }
         }
 

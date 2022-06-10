@@ -244,8 +244,8 @@ namespace configuracion_red_neuronal
                     Escalon();
                     ErrorLinealProducidoAlaSalida();
                     CalularErrorProducidoEnElPatron(i);
-                    //ModificarPesosyUmbrales();
-                    PruebaValores();
+                    ModificarPesosyUmbrales();
+                    //PruebaValores();
                 }
             }
         }
@@ -254,12 +254,12 @@ namespace configuracion_red_neuronal
             int n = 0;
             for (int i = 0; i < Convert.ToInt32(textBoxNIteraciones.Text); i++)
             {
-                //CalculosPorPatron();
-                // CalcularElErrorDeLaIteracion(i);
+                CalculosPorPatron();
+                CalcularElErrorDeLaIteracion(i);
                 n++;
             }
-            CalculosPorPatron();
-           // Graficar();
+            PruebaErrorIteracion();
+            Graficar();
             //MessageBox.Show(Convert.ToString(n));
         }
 
@@ -369,6 +369,14 @@ namespace configuracion_red_neuronal
             for (int i = 0; i < Patrones; i++)
             {
                 MessageBox.Show("Cantidad De Posiciones ErrorPatron: " + i + " Valor: " + Convert.ToString(ErrorPatron[i]));
+            }
+        }
+
+        private void PruebaErrorIteracion()
+        {
+            for (int i = 0; i < Convert.ToInt32(textBoxNIteraciones.Text); i++)
+            {
+                MessageBox.Show("Cantidad De Posiciones ErrorIteracion: " + i + " Valor: " + Convert.ToString(ErrorIteracion[i]));
             }
         }
     }
